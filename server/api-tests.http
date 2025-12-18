@@ -1,0 +1,240 @@
+### VS Code REST Client - API Tests
+### Install "REST Client" extension by Huachao Mao
+### Click "Send Request" above each request to test
+
+@baseUrl = http://localhost:5000
+@token = YOUR_TOKEN_WILL_GO_HERE
+@projectId = YOUR_PROJECT_ID_WILL_GO_HERE
+@taskId = YOUR_TASK_ID_WILL_GO_HERE
+
+### ============================================
+### 1. AUTHENTICATION
+### ============================================
+
+### Register a new user
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "password123"
+}
+
+### Login
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "john@example.com",
+  "password": "password123"
+}
+
+### Get current user profile
+GET {{baseUrl}}/api/auth/me
+Authorization: Bearer {{token}}
+
+### ============================================
+### 2. PROJECTS
+### ============================================
+
+### Create a project
+POST {{baseUrl}}/api/projects
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Website Redesign",
+  "description": "Complete redesign of company website",
+  "color": "#3b82f6",
+  "startDate": "2025-12-01",
+  "dueDate": "2026-03-01"
+}
+
+### Get all projects
+GET {{baseUrl}}/api/projects
+Authorization: Bearer {{token}}
+
+### Get all projects with filters
+GET {{baseUrl}}/api/projects?status=active&search=website&page=1&limit=10
+Authorization: Bearer {{token}}
+
+### Get project by ID
+GET {{baseUrl}}/api/projects/{{projectId}}
+Authorization: Bearer {{token}}
+
+### Update project
+PATCH {{baseUrl}}/api/projects/{{projectId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Updated Project Name",
+  "description": "Updated description",
+  "color": "#10b981"
+}
+
+### Archive project
+DELETE {{baseUrl}}/api/projects/{{projectId}}
+Authorization: Bearer {{token}}
+
+### ============================================
+### 3. TASKS
+### ============================================
+
+### Create task in TODO column
+POST {{baseUrl}}/api/projects/{{projectId}}/tasks
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "Design homepage mockup",
+  "description": "Create high-fidelity mockups for the new homepage",
+  "status": "todo",
+  "priority": "high",
+  "tags": ["design", "ui"],
+  "dueDate": "2025-12-15"
+}
+
+### Create task in IN_PROGRESS column
+POST {{baseUrl}}/api/projects/{{projectId}}/tasks
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "Implement authentication",
+  "status": "in_progress",
+  "priority": "high"
+}
+
+### Create task in DONE column
+POST {{baseUrl}}/api/projects/{{projectId}}/tasks
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "Setup project repository",
+  "status": "done",
+  "priority": "medium"
+}
+
+### Get all tasks for a project
+GET {{baseUrl}}/api/projects/{{projectId}}/tasks
+Authorization: Bearer {{token}}
+
+### Get tasks with filters
+GET {{baseUrl}}/api/projects/{{projectId}}/tasks?status=todo&search=design
+Authorization: Bearer {{token}}
+
+### Get task by ID
+GET {{baseUrl}}/api/tasks/{{taskId}}
+Authorization: Bearer {{token}}
+
+### Update task
+PATCH {{baseUrl}}/api/tasks/{{taskId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "Updated task title",
+  "description": "Updated description",
+  "priority": "urgent",
+  "subtasks": [
+    {
+      "title": "Research design patterns",
+      "isCompleted": false
+    },
+    {
+      "title": "Create wireframes",
+      "isCompleted": true
+    }
+  ]
+}
+
+### Reorder task - Move to IN_PROGRESS column
+PATCH {{baseUrl}}/api/tasks/{{taskId}}/reorder
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "status": "in_progress",
+  "order": 0
+}
+
+### Reorder task - Move within same column
+PATCH {{baseUrl}}/api/tasks/{{taskId}}/reorder
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "status": "todo",
+  "order": 2
+}
+
+### Delete task
+DELETE {{baseUrl}}/api/tasks/{{taskId}}
+Authorization: Bearer {{token}}
+
+### ============================================
+### 4. MEMBER MANAGEMENT
+### ============================================
+
+### Add member to project
+POST {{baseUrl}}/api/projects/{{projectId}}/members
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "userId": "USER_ID_TO_ADD",
+  "role": "member"
+}
+
+### Remove member from project
+DELETE {{baseUrl}}/api/projects/{{projectId}}/members/USER_ID_HERE
+Authorization: Bearer {{token}}
+
+### ============================================
+### 4. COMMENTS
+### ============================================
+
+### Get all comments for a task
+GET {{baseUrl}}/api/tasks/{{taskId}}/comments
+Authorization: Bearer {{token}}
+
+### Create a comment
+POST {{baseUrl}}/api/tasks/{{taskId}}/comments
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "content": "This task is looking great! Let's proceed with the implementation."
+}
+
+### Reply to a comment (nested comment)
+POST {{baseUrl}}/api/tasks/{{taskId}}/comments
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "content": "Thanks for the feedback!",
+  "parentComment": "PARENT_COMMENT_ID_HERE"
+}
+
+### Delete a comment
+DELETE {{baseUrl}}/api/comments/COMMENT_ID_HERE
+Authorization: Bearer {{token}}
+
+### ============================================
+### 5. DASHBOARD
+### ============================================
+
+### Get dashboard overview
+GET {{baseUrl}}/api/dashboard/overview
+Authorization: Bearer {{token}}
+
+### ============================================
+### 6. HEALTH CHECK
+### ============================================
+
+### Check server health
+GET {{baseUrl}}/api/health

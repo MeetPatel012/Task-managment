@@ -1,0 +1,52 @@
+api endpoints
+
+
+1. auth
+//public routes
+post /api/auth/register
+post /api/auth/login
+
+//protected routes
+get /api/auth/me
+
+
+2.project - all routes protected
+
+// Project CRUD
+get /api/projects/
+post /api/projects/
+get /api/projects/:id
+patch /api/projects/:id
+deelte /api/projects/:id
+
+// Member management
+post /api/projects/:id/members
+delete /api/projects/:id/members/:userId
+
+3. Task  - all routes protected
+ 
+// Project-based task routes
+get /api/tasks/projects/:projectId/tasks
+post /api/tasks/projects/:projectId/tasks
+
+// Task-specific routes
+get /api/tasks/:id
+patch  /api/tasks/:id
+patch  /api/tasks/:id/reorder
+delete  /api/tasks/:id
+
+
+4.comment - all routes protected 
+
+// Task-based comment routes
+get /api/comments/tasks/:taskId/comments
+post   /api/comments/tasks/:taskId/comments
+
+// Comment-specific routes
+delete /api/comments/:id
+
+
+5. dashboard - all routes protected
+
+get  /api/dashboard/overview
+
