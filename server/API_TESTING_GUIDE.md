@@ -1,4 +1,4 @@
-# API Testing Guide - Smart Team Task Manager
+# API Testing Guide - Smart Team Project Manager
 
 ## 🚀 Quick Start
 

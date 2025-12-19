@@ -7,8 +7,8 @@ import { Toaster } from "sonner";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Smart Team Task Manager",
-  description: "Collaborative task management for modern teams",
+  title: "Smart Team Project Manager",
+  description: "Collaborative project management for modern teams",
 };
 
 export default function RootLayout({

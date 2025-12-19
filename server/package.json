@@ -1,7 +1,7 @@
 {
-  "name": "smart-team-task-manager-backend",
+  "name": "smart-team-project-manager-backend",
   "version": "1.0.0",
-  "description": "Backend API for Smart Team Task Manager application",
+  "description": "Backend API for Smart Team Project Manager application",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
@@ -10,7 +10,7 @@
   "keywords": [
     "express",
     "mongodb",
-    "task-manager",
+    "project-manager",
     "api"
   ],
   "author": "",

@@ -69,14 +69,18 @@ export default function RegisterPage() {
         <div className="mb-8 text-center">
           <div className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2">
             <CheckSquare className="h-6 w-6 text-primary-foreground" />
-            <span className="text-xl font-bold text-primary-foreground">TaskManager</span>
+            <span className="text-xl font-bold text-primary-foreground">
+              ProjectManager
+            </span>
           </div>
         </div>
 
         {/* Card */}
         <div className="rounded-xl border bg-card p-8 shadow-lg">
           <div className="mb-6">
-            <h1 className="text-2xl font-bold text-card-foreground">Create account</h1>
+            <h1 className="text-2xl font-bold text-card-foreground">
+              Create account
+            </h1>
             <p className="mt-2 text-sm text-muted-foreground">
               Get started with your free account today
             </p>

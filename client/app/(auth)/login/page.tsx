@@ -68,7 +68,7 @@ export default function LoginPage() {
           <div className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2">
             <CheckSquare className="h-6 w-6 text-primary-foreground" />
             <span className="text-xl font-bold text-primary-foreground">
-              TaskManager
+              ProjectManager
             </span>
           </div>
         </div>
