@@ -1,6 +1,6 @@
-const Comment = require('../models/Comment');
-const Task = require('../models/Task');
-const Project = require('../models/Project');
+const Comment = require("../models/Comment");
+const Task = require("../models/Task");
+const Project = require("../models/Project");
 
 /**
  * Get all comments for a task
@@ -13,31 +13,34 @@ const getCommentsByTask = async (req, res, next) => {
     const userId = req.user.id;
 
     // Check if task exists and user has access
-    const task = await Task.findById(taskId).populate('project', 'owner members');
-    
+    const task = await Task.findById(taskId).populate(
+      "project",
+      "owner members"
+    );
+
     if (!task) {
       return res.status(404).json({
         success: false,
-        message: 'Task not found',
+        message: "Task not found",
       });
     }
 
     // Check if user has access to the project
     const hasAccess =
       task.project.owner.toString() === userId ||
-      task.project.members.some(m => m.user.toString() === userId);
+      task.project.members.some((m) => m.user.toString() === userId);
 
     if (!hasAccess) {
       return res.status(403).json({
         success: false,
-        message: 'Access denied',
+        message: "Access denied",
       });
     }
 
     // Get comments sorted by creation time
     const comments = await Comment.find({ task: taskId })
-      .populate('author', 'name email avatarUrl')
-      .populate('parentComment')
+      .populate("author", "name email avatarUrl")
+      .populate("parentComment")
       .sort({ createdAt: 1 });
 
     res.status(200).json({
@@ -64,29 +67,32 @@ const createComment = async (req, res, next) => {
     if (!content || content.trim().length === 0) {
       return res.status(400).json({
         success: false,
-        message: 'Comment content is required',
+        message: "Comment content is required",
       });
     }
 
     // Check if task exists and user has access
-    const task = await Task.findById(taskId).populate('project', 'owner members');
-    
+    const task = await Task.findById(taskId).populate(
+      "project",
+      "owner members"
+    );
+
     if (!task) {
       return res.status(404).json({
         success: false,
-        message: 'Task not found',
+        message: "Task not found",
       });
     }
 
     // Check if user has access to the project
     const hasAccess =
       task.project.owner.toString() === userId ||
-      task.project.members.some(m => m.user.toString() === userId);
+      task.project.members.some((m) => m.user.toString() === userId);
 
     if (!hasAccess) {
       return res.status(403).json({
         success: false,
-        message: 'Access denied',
+        message: "Access denied",
       });
     }
 
@@ -96,13 +102,13 @@ const createComment = async (req, res, next) => {
       if (!parentCommentDoc) {
         return res.status(404).json({
           success: false,
-          message: 'Parent comment not found',
+          message: "Parent comment not found",
         });
       }
       if (parentCommentDoc.task.toString() !== taskId) {
         return res.status(400).json({
           success: false,
-          message: 'Parent comment does not belong to this task',
+          message: "Parent comment does not belong to this task",
         });
       }
     }
@@ -120,7 +126,7 @@ const createComment = async (req, res, next) => {
     await task.save();
 
     // Populate author before returning
-    await comment.populate('author', 'name email avatarUrl');
+    await comment.populate("author", "name email avatarUrl");
 
     res.status(201).json({
       success: true,
@@ -147,18 +153,18 @@ const deleteComment = async (req, res, next) => {
     if (!comment) {
       return res.status(404).json({
         success: false,
-        message: 'Comment not found',
+        message: "Comment not found",
       });
     }
 
     // Check if user is the author or an admin
     const isAuthor = comment.author.toString() === userId;
-    const isAdmin = userRole === 'admin';
+    const isAdmin = userRole === "admin";
 
     if (!isAuthor && !isAdmin) {
       return res.status(403).json({
         success: false,
-        message: 'Only the comment author or admin can delete this comment',
+        message: "Only the comment author or admin can delete this comment",
       });
     }
 
@@ -174,7 +180,7 @@ const deleteComment = async (req, res, next) => {
 
     res.status(200).json({
       success: true,
-      message: 'Comment deleted successfully',
+      message: "Comment deleted successfully",
     });
   } catch (error) {
     next(error);

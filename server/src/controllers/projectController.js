@@ -1,5 +1,5 @@
-const Project = require('../models/Project');
-const User = require('../models/User');
+const Project = require("../models/Project");
+const User = require("../models/User");
 
 /**
  * Get all projects for current user
@@ -13,10 +13,7 @@ const getProjects = async (req, res, next) => {
 
     // Build query
     const query = {
-      $or: [
-        { owner: userId },
-        { 'members.user': userId }
-      ]
+      $or: [{ owner: userId }, { "members.user": userId }],
     };
 
     // Filter by status
@@ -26,15 +23,15 @@ const getProjects = async (req, res, next) => {
 
     // Search by name
     if (search) {
-      query.name = { $regex: search, $options: 'i' };
+      query.name = { $regex: search, $options: "i" };
     }
 
     // Pagination
     const skip = (parseInt(page) - 1) * parseInt(limit);
 
     const projects = await Project.find(query)
-      .populate('owner', 'name email avatarUrl')
-      .populate('members.user', 'name email avatarUrl')
+      .populate("owner", "name email avatarUrl")
+      .populate("members.user", "name email avatarUrl")
       .sort({ updatedAt: -1 })
       .skip(skip)
       .limit(parseInt(limit));
@@ -70,7 +67,7 @@ const createProject = async (req, res, next) => {
     if (!name) {
       return res.status(400).json({
         success: false,
-        message: 'Project name is required',
+        message: "Project name is required",
       });
     }
 
@@ -85,14 +82,14 @@ const createProject = async (req, res, next) => {
       members: [
         {
           user: userId,
-          role: 'owner',
+          role: "owner",
         },
       ],
     });
 
     // Populate owner and members
-    await project.populate('owner', 'name email avatarUrl');
-    await project.populate('members.user', 'name email avatarUrl');
+    await project.populate("owner", "name email avatarUrl");
+    await project.populate("members.user", "name email avatarUrl");
 
     res.status(201).json({
       success: true,
@@ -114,25 +111,25 @@ const getProjectById = async (req, res, next) => {
     const userId = req.user.id;
 
     const project = await Project.findById(id)
-      .populate('owner', 'name email avatarUrl')
-      .populate('members.user', 'name email avatarUrl');
+      .populate("owner", "name email avatarUrl")
+      .populate("members.user", "name email avatarUrl");
 
     if (!project) {
       return res.status(404).json({
         success: false,
-        message: 'Project not found',
+        message: "Project not found",
       });
     }
 
     // Check if user has access
-    const hasAccess = 
+    const hasAccess =
       project.owner._id.toString() === userId ||
-      project.members.some(m => m.user._id.toString() === userId);
+      project.members.some((m) => m.user._id.toString() === userId);
 
     if (!hasAccess) {
       return res.status(403).json({
         success: false,
-        message: 'Access denied',
+        message: "Access denied",
       });
     }
 
@@ -161,19 +158,19 @@ const updateProject = async (req, res, next) => {
     if (!project) {
       return res.status(404).json({
         success: false,
-        message: 'Project not found',
+        message: "Project not found",
       });
     }
 
     // Check if user is owner or manager
-    const member = project.members.find(m => m.user.toString() === userId);
+    const member = project.members.find((m) => m.user.toString() === userId);
     const isOwner = project.owner.toString() === userId;
-    const isManager = member && member.role === 'manager';
+    const isManager = member && member.role === "manager";
 
     if (!isOwner && !isManager) {
       return res.status(403).json({
         success: false,
-        message: 'Only owner or manager can update project',
+        message: "Only owner or manager can update project",
       });
     }
 
@@ -188,8 +185,8 @@ const updateProject = async (req, res, next) => {
     await project.save();
 
     // Populate and return
-    await project.populate('owner', 'name email avatarUrl');
-    await project.populate('members.user', 'name email avatarUrl');
+    await project.populate("owner", "name email avatarUrl");
+    await project.populate("members.user", "name email avatarUrl");
 
     res.status(200).json({
       success: true,
@@ -215,7 +212,7 @@ const deleteProject = async (req, res, next) => {
     if (!project) {
       return res.status(404).json({
         success: false,
-        message: 'Project not found',
+        message: "Project not found",
       });
     }
 
@@ -223,17 +220,17 @@ const deleteProject = async (req, res, next) => {
     if (project.owner.toString() !== userId) {
       return res.status(403).json({
         success: false,
-        message: 'Only owner can archive project',
+        message: "Only owner can archive project",
       });
     }
 
     // Archive project
-    project.status = 'archived';
+    project.status = "archived";
     await project.save();
 
     res.status(200).json({
       success: true,
-      message: 'Project archived successfully',
+      message: "Project archived successfully",
     });
   } catch (error) {
     next(error);
@@ -255,7 +252,7 @@ const addMember = async (req, res, next) => {
     if ((!newUserId && !email) || !role) {
       return res.status(400).json({
         success: false,
-        message: 'Either userId or email is required, along with role',
+        message: "Either userId or email is required, along with role",
       });
     }
 
@@ -266,7 +263,7 @@ const addMember = async (req, res, next) => {
       if (!userToAdd) {
         return res.status(404).json({
           success: false,
-          message: 'User with this email not found',
+          message: "User with this email not found",
         });
       }
     } else {
@@ -274,7 +271,7 @@ const addMember = async (req, res, next) => {
       if (!userToAdd) {
         return res.status(404).json({
           success: false,
-          message: 'User not found',
+          message: "User not found",
         });
       }
     }
@@ -284,28 +281,32 @@ const addMember = async (req, res, next) => {
     if (!project) {
       return res.status(404).json({
         success: false,
-        message: 'Project not found',
+        message: "Project not found",
       });
     }
 
     // Check if current user is owner or manager
-    const member = project.members.find(m => m.user.toString() === currentUserId);
+    const member = project.members.find(
+      (m) => m.user.toString() === currentUserId
+    );
     const isOwner = project.owner.toString() === currentUserId;
-    const isManager = member && member.role === 'manager';
+    const isManager = member && member.role === "manager";
 
     if (!isOwner && !isManager) {
       return res.status(403).json({
         success: false,
-        message: 'Only owner or manager can add members',
+        message: "Only owner or manager can add members",
       });
     }
 
     // Check if user is already a member
-    const alreadyMember = project.members.some(m => m.user.toString() === userToAdd._id.toString());
+    const alreadyMember = project.members.some(
+      (m) => m.user.toString() === userToAdd._id.toString()
+    );
     if (alreadyMember) {
       return res.status(400).json({
         success: false,
-        message: 'User is already a member',
+        message: "User is already a member",
       });
     }
 
@@ -316,11 +317,11 @@ const addMember = async (req, res, next) => {
     });
 
     await project.save();
-    await project.populate('members.user', 'name email avatarUrl');
+    await project.populate("members.user", "name email avatarUrl");
 
     res.status(200).json({
       success: true,
-      message: 'Member added successfully',
+      message: "Member added successfully",
       members: project.members,
     });
   } catch (error) {
@@ -343,19 +344,21 @@ const removeMember = async (req, res, next) => {
     if (!project) {
       return res.status(404).json({
         success: false,
-        message: 'Project not found',
+        message: "Project not found",
       });
     }
 
     // Check if current user is owner or manager
-    const member = project.members.find(m => m.user.toString() === currentUserId);
+    const member = project.members.find(
+      (m) => m.user.toString() === currentUserId
+    );
     const isOwner = project.owner.toString() === currentUserId;
-    const isManager = member && member.role === 'manager';
+    const isManager = member && member.role === "manager";
 
     if (!isOwner && !isManager) {
       return res.status(403).json({
         success: false,
-        message: 'Only owner or manager can remove members',
+        message: "Only owner or manager can remove members",
       });
     }
 
@@ -363,20 +366,20 @@ const removeMember = async (req, res, next) => {
     if (project.owner.toString() === userIdToRemove) {
       return res.status(400).json({
         success: false,
-        message: 'Cannot remove project owner',
+        message: "Cannot remove project owner",
       });
     }
 
     // Remove member
     project.members = project.members.filter(
-      m => m.user.toString() !== userIdToRemove
+      (m) => m.user.toString() !== userIdToRemove
     );
 
     await project.save();
 
     res.status(200).json({
       success: true,
-      message: 'Member removed successfully',
+      message: "Member removed successfully",
     });
   } catch (error) {
     next(error);

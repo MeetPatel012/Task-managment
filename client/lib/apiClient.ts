@@ -54,6 +54,8 @@ export const api = {
     login: (data: { email: string; password: string }) =>
       apiClient.post("/auth/login", data),
     getMe: () => apiClient.get("/auth/me"),
+    getAllUsers: (params?: { search?: string; isActive?: string }) =>
+      apiClient.get("/auth/users", { params }),
     updateProfile: (data: { name?: string; email?: string }) =>
       apiClient.patch("/auth/profile", data),
     changePassword: (data: { currentPassword: string; newPassword: string }) =>

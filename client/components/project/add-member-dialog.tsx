@@ -28,12 +28,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { useAddMember } from "@/lib/hooks/useProjects";
+import { useAddMember, Project } from "@/lib/hooks/useProjects";
+import { useUsers } from "@/lib/hooks/useUsers";
 import { UserPlus } from "lucide-react";
 
 const memberSchema = z.object({
-  userIdentifier: z.string().min(1, "User ID or Email is required"),
+  userId: z.string().min(1, "Please select a user"),
   role: z.enum(["manager", "member", "viewer"]),
 });
 
@@ -41,17 +41,32 @@ type MemberFormValues = z.infer<typeof memberSchema>;
 
 interface AddMemberDialogProps {
   projectId: string;
+  project?: Project;
 }
 
-export function AddMemberDialog({ projectId }: AddMemberDialogProps) {
+export function AddMemberDialog({ projectId, project }: AddMemberDialogProps) {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string>("");
   const addMember = useAddMember();
+  const { data: usersData, isLoading: isLoadingUsers } = useUsers(
+    { isActive: "true" },
+    { enabled: open }
+  );
+
+  // Filter out users who are already members
+  const availableUsers = usersData?.users?.filter((user) => {
+    if (!project) return true;
+    const isOwner = project.owner._id === user._id;
+    const isMember = project.members.some(
+      (member) => member.user._id === user._id
+    );
+    return !isOwner && !isMember;
+  });
 
   const form = useForm<MemberFormValues>({
     resolver: zodResolver(memberSchema),
     defaultValues: {
-      userIdentifier: "",
+      userId: "",
       role: "member",
     },
   });
@@ -59,13 +74,9 @@ export function AddMemberDialog({ projectId }: AddMemberDialogProps) {
   const onSubmit = async (data: MemberFormValues) => {
     try {
       setError("");
-      // Determine if userIdentifier is an email or userId
-      const isEmail = data.userIdentifier.includes("@");
       const payload = {
         projectId,
-        ...(isEmail
-          ? { email: data.userIdentifier }
-          : { userId: data.userIdentifier }),
+        userId: data.userId,
         role: data.role,
       };
       await addMember.mutateAsync(payload);
@@ -91,8 +102,7 @@ export function AddMemberDialog({ projectId }: AddMemberDialogProps) {
         <DialogHeader>
           <DialogTitle>Add Project Member</DialogTitle>
           <DialogDescription>
-            Add a new member to this project by entering their user ID or email
-            address.
+            Select a user from the list to add them as a member to this project.
           </DialogDescription>
         </DialogHeader>
 
@@ -106,16 +116,38 @@ export function AddMemberDialog({ projectId }: AddMemberDialogProps) {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
-              name="userIdentifier"
+              name="userId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>User ID or Email *</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Enter user ID or email address"
-                      {...field}
-                    />
-                  </FormControl>
+                  <FormLabel>User *</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    disabled={isLoadingUsers}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a user" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {isLoadingUsers ? (
+                        <SelectItem value="loading" disabled>
+                          Loading users...
+                        </SelectItem>
+                      ) : availableUsers?.length === 0 ? (
+                        <SelectItem value="no-users" disabled>
+                          No available users to add
+                        </SelectItem>
+                      ) : (
+                        availableUsers?.map((user) => (
+                          <SelectItem key={user._id} value={user._id}>
+                            {user.name} ({user.email})
+                          </SelectItem>
+                        ))
+                      )}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}

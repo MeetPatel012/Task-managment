@@ -286,10 +286,53 @@ const changePassword = async (req, res, next) => {
   }
 };
 
+/**
+ * Get all users
+ * @route GET /api/auth/users
+ * @access Private
+ */
+const getAllUsers = async (req, res, next) => {
+  try {
+    const { search, isActive } = req.query;
+
+    // Build query
+    const query = {};
+
+    // Filter by active status if provided
+    if (isActive !== undefined) {
+      query.isActive = isActive === "true";
+    }
+
+    // Search by name or email
+    if (search) {
+      query.$or = [
+        { name: { $regex: search, $options: "i" } },
+        { email: { $regex: search, $options: "i" } },
+      ];
+    }
+
+    // Get all users, excluding passwordHash
+    const users = await User.find(query)
+      .select("-passwordHash")
+      .select(
+        "name email avatarUrl role isActive lastLoginAt createdAt updatedAt"
+      )
+      .sort({ name: 1 });
+
+    res.status(200).json({
+      success: true,
+      users,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   register,
   login,
   getMe,
   updateProfile,
   changePassword,
+  getAllUsers,
 };

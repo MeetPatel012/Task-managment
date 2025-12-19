@@ -81,7 +81,9 @@ export function ProjectMembers({
               <Users className="h-5 w-5" />
               Project Members
             </CardTitle>
-            {canManageMembers && <AddMemberDialog projectId={project._id} />}
+            {canManageMembers && (
+              <AddMemberDialog projectId={project._id} project={project} />
+            )}
           </div>
         </CardHeader>
         <CardContent>

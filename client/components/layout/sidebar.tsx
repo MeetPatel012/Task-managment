@@ -7,6 +7,7 @@ import {
   FolderKanban,
   Settings,
   CheckSquare,
+  Users,
 } from "lucide-react";
 import {
   Sidebar,
@@ -24,6 +25,7 @@ import { cn } from "@/lib/utils";
 const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { name: "Projects", href: "/projects", icon: FolderKanban },
+  { name: "Users", href: "/users", icon: Users },
   { name: "Settings", href: "/settings", icon: Settings },
 ];
 

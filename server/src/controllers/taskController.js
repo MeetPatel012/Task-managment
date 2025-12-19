@@ -1,5 +1,5 @@
-const Task = require('../models/Task');
-const Project = require('../models/Project');
+const Task = require("../models/Task");
+const Project = require("../models/Project");
 
 /**
  * Get all tasks for a project
@@ -17,18 +17,18 @@ const getTasksByProject = async (req, res, next) => {
     if (!project) {
       return res.status(404).json({
         success: false,
-        message: 'Project not found',
+        message: "Project not found",
       });
     }
 
     const hasAccess =
       project.owner.toString() === userId ||
-      project.members.some(m => m.user.toString() === userId);
+      project.members.some((m) => m.user.toString() === userId);
 
     if (!hasAccess) {
       return res.status(403).json({
         success: false,
-        message: 'Access denied',
+        message: "Access denied",
       });
     }
 
@@ -44,12 +44,12 @@ const getTasksByProject = async (req, res, next) => {
     }
 
     if (search) {
-      query.title = { $regex: search, $options: 'i' };
+      query.title = { $regex: search, $options: "i" };
     }
 
     const tasks = await Task.find(query)
-      .populate('assignee', 'name email avatarUrl')
-      .populate('createdBy', 'name email')
+      .populate("assignee", "name email avatarUrl")
+      .populate("createdBy", "name email")
       .sort({ order: 1, createdAt: -1 });
 
     res.status(200).json({
@@ -69,14 +69,15 @@ const getTasksByProject = async (req, res, next) => {
 const createTask = async (req, res, next) => {
   try {
     const { projectId } = req.params;
-    const { title, description, status, priority, assignee, dueDate, tags } = req.body;
+    const { title, description, status, priority, assignee, dueDate, tags } =
+      req.body;
     const userId = req.user.id;
 
     // Validate required fields
     if (!title) {
       return res.status(400).json({
         success: false,
-        message: 'Task title is required',
+        message: "Task title is required",
       });
     }
 
@@ -85,23 +86,23 @@ const createTask = async (req, res, next) => {
     if (!project) {
       return res.status(404).json({
         success: false,
-        message: 'Project not found',
+        message: "Project not found",
       });
     }
 
     const hasAccess =
       project.owner.toString() === userId ||
-      project.members.some(m => m.user.toString() === userId);
+      project.members.some((m) => m.user.toString() === userId);
 
     if (!hasAccess) {
       return res.status(403).json({
         success: false,
-        message: 'Access denied',
+        message: "Access denied",
       });
     }
 
     // Get max order for the status column
-    const taskStatus = status || 'todo';
+    const taskStatus = status || "todo";
     const maxOrderTask = await Task.findOne({
       project: projectId,
       status: taskStatus,
@@ -124,8 +125,8 @@ const createTask = async (req, res, next) => {
     });
 
     // Populate and return
-    await task.populate('assignee', 'name email avatarUrl');
-    await task.populate('createdBy', 'name email');
+    await task.populate("assignee", "name email avatarUrl");
+    await task.populate("createdBy", "name email");
 
     res.status(201).json({
       success: true,
@@ -147,26 +148,26 @@ const getTaskById = async (req, res, next) => {
     const userId = req.user.id;
 
     const task = await Task.findById(id)
-      .populate('project', 'name owner members')
-      .populate('assignee', 'name email avatarUrl')
-      .populate('createdBy', 'name email avatarUrl');
+      .populate("project", "name owner members")
+      .populate("assignee", "name email avatarUrl")
+      .populate("createdBy", "name email avatarUrl");
 
     if (!task) {
       return res.status(404).json({
         success: false,
-        message: 'Task not found',
+        message: "Task not found",
       });
     }
 
     // Check if user has access to the project
     const hasAccess =
       task.project.owner.toString() === userId ||
-      task.project.members.some(m => m.user.toString() === userId);
+      task.project.members.some((m) => m.user.toString() === userId);
 
     if (!hasAccess) {
       return res.status(403).json({
         success: false,
-        message: 'Access denied',
+        message: "Access denied",
       });
     }
 
@@ -188,26 +189,35 @@ const updateTask = async (req, res, next) => {
   try {
     const { id } = req.params;
     const userId = req.user.id;
-    const { title, description, status, priority, assignee, dueDate, tags, subtasks } = req.body;
+    const {
+      title,
+      description,
+      status,
+      priority,
+      assignee,
+      dueDate,
+      tags,
+      subtasks,
+    } = req.body;
 
-    const task = await Task.findById(id).populate('project', 'owner members');
+    const task = await Task.findById(id).populate("project", "owner members");
 
     if (!task) {
       return res.status(404).json({
         success: false,
-        message: 'Task not found',
+        message: "Task not found",
       });
     }
 
     // Check if user has access
     const hasAccess =
       task.project.owner.toString() === userId ||
-      task.project.members.some(m => m.user.toString() === userId);
+      task.project.members.some((m) => m.user.toString() === userId);
 
     if (!hasAccess) {
       return res.status(403).json({
         success: false,
-        message: 'Access denied',
+        message: "Access denied",
       });
     }
 
@@ -224,8 +234,8 @@ const updateTask = async (req, res, next) => {
     await task.save();
 
     // Populate and return
-    await task.populate('assignee', 'name email avatarUrl');
-    await task.populate('createdBy', 'name email');
+    await task.populate("assignee", "name email avatarUrl");
+    await task.populate("createdBy", "name email");
 
     res.status(200).json({
       success: true,
@@ -251,28 +261,28 @@ const reorderTask = async (req, res, next) => {
     if (status === undefined || order === undefined) {
       return res.status(400).json({
         success: false,
-        message: 'status and order are required',
+        message: "status and order are required",
       });
     }
 
-    const task = await Task.findById(id).populate('project', 'owner members');
+    const task = await Task.findById(id).populate("project", "owner members");
 
     if (!task) {
       return res.status(404).json({
         success: false,
-        message: 'Task not found',
+        message: "Task not found",
       });
     }
 
     // Check if user has access
     const hasAccess =
       task.project.owner.toString() === userId ||
-      task.project.members.some(m => m.user.toString() === userId);
+      task.project.members.some((m) => m.user.toString() === userId);
 
     if (!hasAccess) {
       return res.status(403).json({
         success: false,
-        message: 'Access denied',
+        message: "Access denied",
       });
     }
 
@@ -333,8 +343,8 @@ const reorderTask = async (req, res, next) => {
     await task.save();
 
     // Populate and return
-    await task.populate('assignee', 'name email avatarUrl');
-    await task.populate('createdBy', 'name email');
+    await task.populate("assignee", "name email avatarUrl");
+    await task.populate("createdBy", "name email");
 
     res.status(200).json({
       success: true,
@@ -355,24 +365,24 @@ const deleteTask = async (req, res, next) => {
     const { id } = req.params;
     const userId = req.user.id;
 
-    const task = await Task.findById(id).populate('project', 'owner members');
+    const task = await Task.findById(id).populate("project", "owner members");
 
     if (!task) {
       return res.status(404).json({
         success: false,
-        message: 'Task not found',
+        message: "Task not found",
       });
     }
 
     // Check if user has access
     const hasAccess =
       task.project.owner.toString() === userId ||
-      task.project.members.some(m => m.user.toString() === userId);
+      task.project.members.some((m) => m.user.toString() === userId);
 
     if (!hasAccess) {
       return res.status(403).json({
         success: false,
-        message: 'Access denied',
+        message: "Access denied",
       });
     }
 
@@ -380,7 +390,7 @@ const deleteTask = async (req, res, next) => {
 
     res.status(200).json({
       success: true,
-      message: 'Task deleted successfully',
+      message: "Task deleted successfully",
     });
   } catch (error) {
     next(error);
