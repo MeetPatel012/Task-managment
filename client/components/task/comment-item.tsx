@@ -74,11 +74,11 @@ export function CommentItem({
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
             <span className="font-semibold text-sm">{comment.author.name}</span>
-            <span className="text-xs text-gray-500">
+            <span className="text-xs text-muted-foreground">
               {formatTime(comment.createdAt)}
             </span>
           </div>
-          <p className="text-sm text-gray-700 whitespace-pre-wrap wrap-break-word">
+          <p className="text-sm text-foreground whitespace-pre-wrap wrap-break-word">
             {comment.content}
           </p>
         </div>
@@ -87,7 +87,7 @@ export function CommentItem({
           <Button
             variant="ghost"
             size="sm"
-            className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-50 hover:text-red-600"
+            className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-destructive/10 hover:text-destructive"
             onClick={() => setShowDeleteDialog(true)}
           >
             <Trash2 className="h-4 w-4" />

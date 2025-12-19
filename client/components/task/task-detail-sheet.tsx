@@ -127,9 +127,10 @@ export function TaskDetailSheet({
   };
 
   const statusConfig = {
-    todo: { color: "bg-slate-100 text-slate-700", label: "To Do" },
-    in_progress: { color: "bg-blue-100 text-blue-700", label: "In Progress" },
-    done: { color: "bg-green-100 text-green-700", label: "Done" },
+    todo: { color: "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300", label: "To Do" },
+    in_progress: { color: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300", label: "Work In Progress" },
+    under_review: { color: "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300", label: "Under Review" },
+    done: { color: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300", label: "Completed" },
   };
 
   const getInitials = (name: string) => {
@@ -158,7 +159,7 @@ export function TaskDetailSheet({
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent className="w-full sm:max-w-[600px] overflow-y-auto p-0">
         {/* Header */}
-        <div className="sticky top-0 z-10 bg-white border-b px-6 py-4">
+        <div className="sticky top-0 z-10 bg-background border-b px-6 py-4">
           <SheetHeader>
             <div className="flex items-start justify-between gap-4">
               <div className="flex-1 min-w-0">
@@ -174,7 +175,7 @@ export function TaskDetailSheet({
                 </SheetTitle>
                 <SheetDescription className="mt-1 flex items-center gap-2">
                   <span>Created by {task.createdBy.name}</span>
-                  <span className="text-gray-400">•</span>
+                  <span className="text-muted-foreground">•</span>
                   <span className="text-xs">
                     {formatDistanceToNow(new Date(task.createdAt), {
                       addSuffix: true,
@@ -215,8 +216,8 @@ export function TaskDetailSheet({
         <div className="px-6 py-6 space-y-6">
           {/* Status & Priority Cards */}
           <div className="grid grid-cols-2 gap-3">
-            <div className="border rounded-lg p-4 bg-gray-50/50">
-              <h4 className="text-xs font-medium text-gray-500 mb-2">Status</h4>
+            <div className="border rounded-lg p-4 bg-muted/50">
+              <h4 className="text-xs font-medium text-muted-foreground mb-2">Status</h4>
               {isEditing ? (
                 <Select
                   onValueChange={(value) =>
@@ -229,8 +230,9 @@ export function TaskDetailSheet({
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="todo">To Do</SelectItem>
-                    <SelectItem value="in_progress">In Progress</SelectItem>
-                    <SelectItem value="done">Done</SelectItem>
+                    <SelectItem value="in_progress">Work In Progress</SelectItem>
+                    <SelectItem value="under_review">Under Review</SelectItem>
+                    <SelectItem value="done">Completed</SelectItem>
                   </SelectContent>
                 </Select>
               ) : (
@@ -245,8 +247,8 @@ export function TaskDetailSheet({
               )}
             </div>
 
-            <div className="border rounded-lg p-4 bg-gray-50/50">
-              <h4 className="text-xs font-medium text-gray-500 mb-2">
+            <div className="border rounded-lg p-4 bg-muted/50">
+              <h4 className="text-xs font-medium text-muted-foreground mb-2">
                 Priority
               </h4>
               {isEditing ? (
@@ -292,9 +294,9 @@ export function TaskDetailSheet({
                 placeholder="Add a description..."
               />
             ) : (
-              <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
+              <p className="text-sm text-foreground leading-relaxed whitespace-pre-wrap">
                 {task.description || (
-                  <span className="text-gray-400 italic">
+                  <span className="text-muted-foreground italic">
                     No description provided
                   </span>
                 )}
@@ -308,14 +310,14 @@ export function TaskDetailSheet({
           <div className="space-y-4">
             {/* Assignee */}
             <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2 text-sm font-medium text-gray-500 w-24">
+              <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground w-24">
                 <User className="h-4 w-4" />
                 <span>Assignee</span>
               </div>
               {task.assignee ? (
                 <div className="flex items-center gap-2">
                   <Avatar className="h-7 w-7">
-                    <AvatarFallback className="text-xs bg-blue-100 text-blue-700">
+                    <AvatarFallback className="text-xs bg-primary text-primary-foreground">
                       {getInitials(task.assignee.name)}
                     </AvatarFallback>
                   </Avatar>
@@ -324,13 +326,13 @@ export function TaskDetailSheet({
                   </span>
                 </div>
               ) : (
-                <span className="text-sm text-gray-400 italic">Unassigned</span>
+                <span className="text-sm text-muted-foreground italic">Unassigned</span>
               )}
             </div>
 
             {/* Due Date */}
             <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2 text-sm font-medium text-gray-500 w-24">
+              <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground w-24">
                 <Calendar className="h-4 w-4" />
                 <span>Due Date</span>
               </div>
@@ -349,7 +351,7 @@ export function TaskDetailSheet({
                     <div className="flex items-center gap-2">
                       <span
                         className={`text-sm font-medium ${
-                          isOverdue ? "text-red-600" : "text-gray-700"
+                          isOverdue ? "text-destructive" : "text-foreground"
                         }`}
                       >
                         {formattedDate}
@@ -366,7 +368,7 @@ export function TaskDetailSheet({
                   );
                 })()
               ) : (
-                <span className="text-sm text-gray-400 italic">
+                <span className="text-sm text-muted-foreground italic">
                   No due date
                 </span>
               )}
@@ -374,11 +376,11 @@ export function TaskDetailSheet({
 
             {/* Created */}
             <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2 text-sm font-medium text-gray-500 w-24">
+              <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground w-24">
                 <Clock className="h-4 w-4" />
                 <span>Created</span>
               </div>
-              <span className="text-sm text-gray-700">
+              <span className="text-sm text-foreground">
                 {new Date(task.createdAt).toLocaleDateString("en-US", {
                   month: "short",
                   day: "numeric",
@@ -420,7 +422,7 @@ export function TaskDetailSheet({
                 <h4 className="text-sm font-semibold mb-3 flex items-center gap-2">
                   <CheckSquare className="h-4 w-4" />
                   Subtasks
-                  <span className="text-xs font-normal text-gray-500">
+                  <span className="text-xs font-normal text-muted-foreground">
                     ({task.subtasks.filter((s) => s.isCompleted).length}/
                     {task.subtasks.length})
                   </span>
@@ -429,7 +431,7 @@ export function TaskDetailSheet({
                   {task.subtasks.map((subtask, index) => (
                     <div
                       key={index}
-                      className="flex items-center gap-3 p-2 rounded-md hover:bg-gray-50 transition-colors"
+                      className="flex items-center gap-3 p-2 rounded-md hover:bg-accent transition-colors"
                     >
                       <Checkbox
                         checked={subtask.isCompleted}
@@ -438,8 +440,8 @@ export function TaskDetailSheet({
                       <span
                         className={`text-sm flex-1 ${
                           subtask.isCompleted
-                            ? "line-through text-gray-400"
-                            : "text-gray-700"
+                            ? "line-through text-muted-foreground"
+                            : "text-foreground"
                         }`}
                       >
                         {subtask.title}

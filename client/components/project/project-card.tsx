@@ -61,7 +61,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
                   {project.name}
                 </h3>
               </div>
-              <p className="text-sm text-gray-600 line-clamp-2">
+              <p className="text-sm text-muted-foreground line-clamp-2">
                 {project.description || "No description"}
               </p>
             </div>
@@ -83,20 +83,20 @@ export function ProjectCard({ project }: ProjectCardProps) {
                 {getInitials(project.owner.name)}
               </AvatarFallback>
             </Avatar>
-            <span className="text-gray-600">
+            <span className="text-muted-foreground">
               {isOwner ? "You" : project.owner.name}
             </span>
           </div>
 
           {/* Stats */}
           <div className="flex items-center justify-between text-sm">
-            <div className="flex items-center gap-1 text-gray-600">
+            <div className="flex items-center gap-1 text-muted-foreground">
               <Users className="h-4 w-4" />
               <span>{project.members.length}</span>
             </div>
 
             {project.dueDate && (
-              <div className="flex items-center gap-1 text-gray-600">
+              <div className="flex items-center gap-1 text-muted-foreground">
                 <Calendar className="h-4 w-4" />
                 <span className="text-xs">{formatDate(project.dueDate)}</span>
               </div>

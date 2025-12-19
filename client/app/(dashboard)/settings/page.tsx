@@ -120,8 +120,8 @@ export default function SettingsPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Settings</h1>
-        <p className="mt-2 text-gray-600">
+        <h1 className="text-3xl font-bold text-foreground">Settings</h1>
+        <p className="mt-2 text-muted-foreground">
           Manage your account settings and preferences
         </p>
       </div>
@@ -166,6 +166,7 @@ export default function SettingsPage() {
                         <Input
                           type="email"
                           placeholder="you@example.com"
+                          disabled
                           {...field}
                         />
                       </FormControl>
@@ -272,19 +273,19 @@ export default function SettingsPage() {
           </CardHeader>
           <CardContent className="space-y-3">
             <div className="flex justify-between py-2">
-              <span className="text-sm font-medium text-gray-500">
+              <span className="text-sm font-medium text-muted-foreground">
                 Account Role
               </span>
-              <span className="text-sm text-gray-900 capitalize">
+              <span className="text-sm text-foreground capitalize">
                 {user?.role || "User"}
               </span>
             </div>
             <Separator />
             <div className="flex justify-between py-2">
-              <span className="text-sm font-medium text-gray-500">
+              <span className="text-sm font-medium text-muted-foreground">
                 Member Since
               </span>
-              <span className="text-sm text-gray-900">
+              <span className="text-sm text-foreground">
                 {user?.createdAt
                   ? new Date(user.createdAt).toLocaleDateString()
                   : "N/A"}

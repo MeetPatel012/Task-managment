@@ -16,6 +16,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { LogOut } from "lucide-react";
 import Link from "next/link";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
 export function TopBar() {
   const router = useRouter();
@@ -26,6 +28,7 @@ export function TopBar() {
 
   const initials = user.name
     .split(" ")
+    .slice(0, 2)
     .map((n) => n[0])
     .join("")
     .toUpperCase();
@@ -37,16 +40,20 @@ export function TopBar() {
 
   return (
     <>
-      <div className="flex h-16 items-center justify-end border-b bg-white px-6">
+      <div className="flex h-16 items-center justify-between border-b bg-background px-6 pl-4">
+        <SidebarTrigger />
         <div className="flex items-center gap-4">
+          <ThemeToggle />
           <Link href={"/settings"}>
             <div className="flex items-center gap-3">
               <div className="text-right">
-                <p className="text-sm font-medium text-gray-900">{user.name}</p>
-                <p className="text-xs text-gray-500">{user.email}</p>
+                <p className="text-sm font-medium text-foreground">
+                  {user.name}
+                </p>
+                <p className="text-xs text-muted-foreground">{user.email}</p>
               </div>
               <Avatar>
-                <AvatarFallback className="bg-blue-600 text-white">
+                <AvatarFallback className="bg-primary text-primary-foreground">
                   {initials}
                 </AvatarFallback>
               </Avatar>
@@ -54,7 +61,7 @@ export function TopBar() {
           </Link>
           <button
             onClick={() => setShowLogoutDialog(true)}
-            className="rounded-lg p-2 hover:bg-gray-100 text-gray-600 hover:text-gray-900"
+            className="rounded-lg p-2 hover:bg-accent text-muted-foreground hover:text-foreground transition-colors"
             title="Logout"
           >
             <LogOut className="h-5 w-5" />

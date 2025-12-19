@@ -61,21 +61,25 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-background to-muted">
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="mb-8 text-center">
-          <div className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2">
-            <CheckSquare className="h-6 w-6 text-white" />
-            <span className="text-xl font-bold text-white">TaskManager</span>
+          <div className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2">
+            <CheckSquare className="h-6 w-6 text-primary-foreground" />
+            <span className="text-xl font-bold text-primary-foreground">
+              TaskManager
+            </span>
           </div>
         </div>
 
         {/* Card */}
-        <div className="rounded-xl border bg-white p-8 shadow-lg">
+        <div className="rounded-xl border bg-card p-8 shadow-lg">
           <div className="mb-6">
-            <h1 className="text-2xl font-bold text-gray-900">Welcome back</h1>
-            <p className="mt-2 text-sm text-gray-600">
+            <h1 className="text-2xl font-bold text-card-foreground">
+              Welcome back
+            </h1>
+            <p className="mt-2 text-sm text-muted-foreground">
               Sign in to your account to continue
             </p>
           </div>
@@ -124,11 +128,11 @@ export default function LoginPage() {
             </form>
           </Form>
 
-          <p className="mt-6 text-center text-sm text-gray-600">
+          <p className="mt-6 text-center text-sm text-muted-foreground">
             Don't have an account?{" "}
             <Link
               href="/register"
-              className="font-medium text-blue-600 hover:text-blue-700"
+              className="font-medium text-primary hover:text-primary/80"
             >
               Sign up
             </Link>

@@ -6,7 +6,7 @@ export interface Task {
   project: string;
   title: string;
   description: string;
-  status: "todo" | "in_progress" | "done";
+  status: "todo" | "in_progress" | "under_review" | "done";
   priority: "low" | "medium" | "high" | "urgent";
   assignee?: {
     _id: string;

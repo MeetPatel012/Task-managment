@@ -68,10 +68,10 @@ export default function ProjectDetailPage({
     return (
       <div className="flex flex-col items-center justify-center py-12">
         <AlertCircle className="h-12 w-12 text-red-500 mb-4" />
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">
+        <h3 className="text-lg font-semibold text-foreground mb-2">
           Failed to load project
         </h3>
-        <p className="text-gray-600 text-center max-w-md">
+        <p className="text-muted-foreground text-center max-w-md">
           {projectError instanceof Error
             ? projectError.message
             : "An error occurred"}
@@ -83,7 +83,7 @@ export default function ProjectDetailPage({
   if (!project) {
     return (
       <div className="flex flex-col items-center justify-center py-12">
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">
+        <h3 className="text-lg font-semibold text-foreground mb-2">
           Project not found
         </h3>
       </div>
@@ -96,7 +96,9 @@ export default function ProjectDetailPage({
       <div className="flex items-start justify-between">
         <div className="flex-1">
           <div className="flex items-center gap-3 mb-2">
-            <h1 className="text-3xl font-bold text-gray-900">{project.name}</h1>
+            <h1 className="text-3xl font-bold text-foreground">
+              {project.name}
+            </h1>
             <Badge
               variant={project.status === "active" ? "default" : "secondary"}
             >
@@ -104,9 +106,11 @@ export default function ProjectDetailPage({
             </Badge>
           </div>
           {project.description && (
-            <p className="text-gray-600 max-w-3xl">{project.description}</p>
+            <p className="text-muted-foreground max-w-3xl">
+              {project.description}
+            </p>
           )}
-          <div className="mt-3 flex items-center gap-4 text-sm text-gray-500">
+          <div className="mt-3 flex items-center gap-4 text-sm text-muted-foreground">
             <span>{project.members.length} members</span>
             {project.dueDate && (
               <span>Due {new Date(project.dueDate).toLocaleDateString()}</span>
@@ -128,12 +132,12 @@ export default function ProjectDetailPage({
       </div>
 
       {/* Kanban Board */}
-      <div className="bg-white rounded-lg border p-6">
+      <div className="bg-card rounded-lg border p-6">
         {tasks.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12">
-            <div className="rounded-full bg-gray-100 p-6 mb-4">
+            <div className="rounded-full bg-muted p-6 mb-4">
               <svg
-                className="h-12 w-12 text-gray-400"
+                className="h-12 w-12 text-muted-foreground"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -146,10 +150,10 @@ export default function ProjectDetailPage({
                 />
               </svg>
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+            <h3 className="text-lg font-semibold text-foreground mb-2">
               No tasks yet
             </h3>
-            <p className="text-gray-600 text-center max-w-md mb-6">
+            <p className="text-muted-foreground text-center max-w-md mb-6">
               Get started by creating your first task for this project.
             </p>
             <NewTaskDialog projectId={projectId} project={project} />

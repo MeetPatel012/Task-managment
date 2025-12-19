@@ -7,6 +7,7 @@ export interface DashboardOverview {
   tasksByStatus: {
     todo: number;
     in_progress: number;
+    under_review: number;
     done: number;
   };
   upcomingTasks: Array<{

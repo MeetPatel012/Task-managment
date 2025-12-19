@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const subtaskSchema = new Schema(
@@ -30,7 +30,7 @@ const attachmentSchema = new Schema(
     },
     fileType: {
       type: String,
-      default: '',
+      default: "",
     },
     fileSize: {
       type: Number,
@@ -47,7 +47,7 @@ const taskSchema = new Schema(
   {
     project: {
       type: Schema.Types.ObjectId,
-      ref: 'Project',
+      ref: "Project",
       required: true,
       index: true,
     },
@@ -59,30 +59,30 @@ const taskSchema = new Schema(
     },
     description: {
       type: String,
-      default: '',
+      default: "",
       maxlength: 5000,
     },
     status: {
       type: String,
-      enum: ['todo', 'in_progress', 'done'],
-      default: 'todo',
+      enum: ["todo", "in_progress", "under_review", "done"],
+      default: "todo",
       index: true,
     },
     priority: {
       type: String,
-      enum: ['low', 'medium', 'high', 'urgent'],
-      default: 'medium',
+      enum: ["low", "medium", "high", "urgent"],
+      default: "medium",
       index: true,
     },
     assignee: {
       type: Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
       default: null,
       index: true,
     },
     createdBy: {
       type: Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
       required: true,
     },
     dueDate: {
@@ -115,4 +115,4 @@ const taskSchema = new Schema(
   }
 );
 
-module.exports = mongoose.model('Task', taskSchema);
+module.exports = mongoose.model("Task", taskSchema);

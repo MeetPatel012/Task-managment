@@ -37,7 +37,7 @@ export function TaskComments({ taskId, currentUserId }: TaskCommentsProps) {
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-2 border-t pt-4">
-        <MessageSquare className="h-5 w-5 text-gray-600" />
+        <MessageSquare className="h-5 w-5 text-muted-foreground" />
         <h4 className="text-sm font-semibold">Comments ({comments.length})</h4>
       </div>
 
@@ -72,14 +72,14 @@ export function TaskComments({ taskId, currentUserId }: TaskCommentsProps) {
       <div className="space-y-4">
         {isLoading ? (
           <div className="flex items-center justify-center py-8">
-            <Loader2 className="h-6 w-6 animate-spin text-gray-400" />
+            <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
           </div>
         ) : error ? (
           <div className="text-center py-8 text-sm text-red-600">
             Failed to load comments. Please try again.
           </div>
         ) : comments.length === 0 ? (
-          <div className="text-center py-8 text-sm text-gray-500">
+          <div className="text-center py-8 text-sm text-muted-foreground">
             No comments yet. Be the first to comment!
           </div>
         ) : (

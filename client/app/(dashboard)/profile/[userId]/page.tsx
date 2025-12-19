@@ -44,7 +44,7 @@ export default function UserProfilePage({
   if (!user) {
     return (
       <div className="flex items-center justify-center py-12">
-        <p className="text-gray-600">User not found</p>
+        <p className="text-muted-foreground">User not found</p>
       </div>
     );
   }
@@ -53,8 +53,8 @@ export default function UserProfilePage({
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">User Profile</h1>
-        <p className="mt-2 text-gray-600">View user information and activity</p>
+        <h1 className="text-3xl font-bold text-foreground">User Profile</h1>
+        <p className="mt-2 text-muted-foreground">View user information and activity</p>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
@@ -67,8 +67,8 @@ export default function UserProfilePage({
                   {getInitials(user.name)}
                 </AvatarFallback>
               </Avatar>
-              <h2 className="text-2xl font-bold text-gray-900">{user.name}</h2>
-              <p className="text-gray-600 mt-1">{user.email}</p>
+              <h2 className="text-2xl font-bold text-foreground">{user.name}</h2>
+              <p className="text-muted-foreground mt-1">{user.email}</p>
               <Badge className="mt-3 capitalize" variant="secondary">
                 {user.role}
               </Badge>
@@ -76,16 +76,16 @@ export default function UserProfilePage({
 
             <div className="mt-6 space-y-4">
               <div className="flex items-center gap-3 text-sm">
-                <Mail className="h-4 w-4 text-gray-400" />
-                <span className="text-gray-700">{user.email}</span>
+                <Mail className="h-4 w-4 text-muted-foreground" />
+                <span className="text-foreground">{user.email}</span>
               </div>
               <div className="flex items-center gap-3 text-sm">
-                <Shield className="h-4 w-4 text-gray-400" />
-                <span className="text-gray-700 capitalize">{user.role}</span>
+                <Shield className="h-4 w-4 text-muted-foreground" />
+                <span className="text-foreground capitalize">{user.role}</span>
               </div>
               <div className="flex items-center gap-3 text-sm">
-                <Calendar className="h-4 w-4 text-gray-400" />
-                <span className="text-gray-700">
+                <Calendar className="h-4 w-4 text-muted-foreground" />
+                <span className="text-foreground">
                   Joined{" "}
                   {user.createdAt
                     ? new Date(user.createdAt).toLocaleDateString("en-US", {
@@ -97,8 +97,8 @@ export default function UserProfilePage({
               </div>
               {user.lastLoginAt && (
                 <div className="flex items-center gap-3 text-sm">
-                  <Clock className="h-4 w-4 text-gray-400" />
-                  <span className="text-gray-700">
+                  <Clock className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-foreground">
                     Last active{" "}
                     {formatDistanceToNow(new Date(user.lastLoginAt), {
                       addSuffix: true,
@@ -116,33 +116,33 @@ export default function UserProfilePage({
           <div className="grid gap-4 md:grid-cols-2">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium text-gray-600">
+                <CardTitle className="text-sm font-medium text-muted-foreground">
                   Projects
                 </CardTitle>
-                <FolderKanban className="h-5 w-5 text-blue-600" />
+                <FolderKanban className="h-5 w-5 text-primary" />
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold text-gray-900">
+                <div className="text-3xl font-bold text-foreground">
                   {projectsLoading ? (
                     <Skeleton className="h-8 w-12" />
                   ) : (
                     projects.length
                   )}
                 </div>
-                <p className="text-xs text-gray-500 mt-1">Active projects</p>
+                <p className="text-xs text-muted-foreground mt-1">Active projects</p>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium text-gray-600">
+                <CardTitle className="text-sm font-medium text-muted-foreground">
                   Tasks
                 </CardTitle>
-                <ListChecks className="h-5 w-5 text-orange-600" />
+                <ListChecks className="h-5 w-5 text-primary" />
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold text-gray-900">0</div>
-                <p className="text-xs text-gray-500 mt-1">Assigned tasks</p>
+                <div className="text-3xl font-bold text-foreground">0</div>
+                <p className="text-xs text-muted-foreground mt-1">Assigned tasks</p>
               </CardContent>
             </Card>
           </div>
@@ -161,25 +161,25 @@ export default function UserProfilePage({
                 </div>
               ) : projects.length === 0 ? (
                 <div className="text-center py-8">
-                  <FolderKanban className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-                  <p className="text-sm text-gray-500">No projects yet</p>
+                  <FolderKanban className="h-12 w-12 text-muted-foreground/50 mx-auto mb-3" />
+                  <p className="text-sm text-muted-foreground">No projects yet</p>
                 </div>
               ) : (
                 <div className="space-y-3">
                   {projects.slice(0, 5).map((project: any) => (
                     <div
                       key={project._id}
-                      className="flex items-center gap-3 p-3 rounded-lg border hover:bg-gray-50 transition-colors"
+                      className="flex items-center gap-3 p-3 rounded-lg border hover:bg-accent transition-colors"
                     >
                       <div
                         className="w-3 h-3 rounded-full"
                         style={{ backgroundColor: project.color || "#3b82f6" }}
                       />
                       <div className="flex-1 min-w-0">
-                        <h4 className="font-medium text-sm text-gray-900 truncate">
+                        <h4 className="font-medium text-sm text-foreground truncate">
                           {project.name}
                         </h4>
-                        <p className="text-xs text-gray-500">
+                        <p className="text-xs text-muted-foreground">
                           {project.members?.length || 0} members
                         </p>
                       </div>

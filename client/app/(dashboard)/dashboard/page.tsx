@@ -34,6 +34,7 @@ const priorityColors = {
 const statusColors = {
   todo: "#94a3b8",
   in_progress: "#3b82f6",
+  under_review: "#f59e0b",
   done: "#22c55e",
 };
 
@@ -61,10 +62,10 @@ export default function DashboardPage() {
     return (
       <div className="flex flex-col items-center justify-center py-12">
         <AlertCircle className="h-12 w-12 text-red-500 mb-4" />
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">
+        <h3 className="text-lg font-semibold text-foreground mb-2">
           Failed to load dashboard
         </h3>
-        <p className="text-gray-600">
+        <p className="text-muted-foreground">
           {error instanceof Error ? error.message : "An error occurred"}
         </p>
       </div>
@@ -90,6 +91,11 @@ export default function DashboardPage() {
       fill: statusColors.in_progress,
     },
     {
+      name: "Under Review",
+      value: overview.tasksByStatus.under_review || 0,
+      fill: statusColors.under_review,
+    },
+    {
       name: "Done",
       value: overview.tasksByStatus.done,
       fill: statusColors.done,
@@ -104,52 +110,52 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-        <p className="mt-2 text-gray-600">
+        <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
+        <p className="mt-2 text-muted-foreground">
           Welcome back! Here's an overview of your work.
         </p>
       </div>
       <div className="grid gap-6 md:grid-cols-3">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">
+            <CardTitle className="text-sm font-medium text-muted-foreground">
               Projects
             </CardTitle>
-            <FolderKanban className="h-5 w-5 text-blue-600" />
+            <FolderKanban className="h-5 w-5 text-primary" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-gray-900">
+            <div className="text-3xl font-bold text-foreground">
               {overview.projectsCount}
             </div>
-            <p className="text-xs text-gray-500 mt-1">Active projects</p>
+            <p className="text-xs text-muted-foreground mt-1">Active projects</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">
+            <CardTitle className="text-sm font-medium text-muted-foreground">
               My Tasks
             </CardTitle>
-            <ListChecks className="h-5 w-5 text-orange-600" />
+            <ListChecks className="h-5 w-5 text-primary" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-gray-900">
+            <div className="text-3xl font-bold text-foreground">
               {overview.tasksAssignedCount}
             </div>
-            <p className="text-xs text-gray-500 mt-1">Assigned to you</p>
+            <p className="text-xs text-muted-foreground mt-1">Assigned to you</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">
+            <CardTitle className="text-sm font-medium text-muted-foreground">
               Completion Rate
             </CardTitle>
-            <CheckCircle className="h-5 w-5 text-green-600" />
+            <CheckCircle className="h-5 w-5 text-primary" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-gray-900">
+            <div className="text-3xl font-bold text-foreground">
               {completionRate}%
             </div>
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               {completedTasks} of {totalTasks} tasks done
             </p>
           </CardContent>
@@ -166,14 +172,15 @@ export default function DashboardPage() {
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                <XAxis dataKey="name" stroke="#6b7280" fontSize={12} />
-                <YAxis stroke="#6b7280" fontSize={12} />
+                <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                <XAxis dataKey="name" className="stroke-muted-foreground" fontSize={12} />
+                <YAxis className="stroke-muted-foreground" fontSize={12} />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: "white",
-                    border: "1px solid #e5e7eb",
+                    backgroundColor: "hsl(var(--popover))",
+                    border: "1px solid hsl(var(--border))",
                     borderRadius: "8px",
+                    color: "hsl(var(--popover-foreground))",
                   }}
                 />
                 <Bar dataKey="value" radius={[8, 8, 0, 0]}>
@@ -195,8 +202,8 @@ export default function DashboardPage() {
           <CardContent>
             {overview.upcomingTasks.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-8 text-center">
-                <Calendar className="h-12 w-12 text-gray-300 mb-3" />
-                <p className="text-sm text-gray-500">
+                <Calendar className="h-12 w-12 text-muted-foreground/50 mb-3" />
+                <p className="text-sm text-muted-foreground">
                   No upcoming tasks in the next 7 days
                 </p>
               </div>
@@ -204,12 +211,12 @@ export default function DashboardPage() {
               <div className="space-y-3">
                 {overview.upcomingTasks.map((task) => (
                   <Link href={"/projects/" + task.project._id} key={task._id}>
-                    <div className="flex items-start gap-3 p-3 rounded-lg border hover:bg-gray-50 transition-colors">
+                    <div className="flex items-start gap-3 p-3 rounded-lg border hover:bg-accent transition-colors">
                       <div className="flex-1 min-w-0">
-                        <h4 className="font-medium text-sm text-gray-900 truncate">
+                        <h4 className="font-medium text-sm text-foreground truncate">
                           {task.title}
                         </h4>
-                        <p className="text-xs text-gray-500 mt-1">
+                        <p className="text-xs text-muted-foreground mt-1">
                           {task.project.name}
                         </p>
                       </div>
@@ -224,7 +231,7 @@ export default function DashboardPage() {
                         >
                           {task.priority}
                         </Badge>
-                        <span className="text-xs text-gray-500">
+                        <span className="text-xs text-muted-foreground">
                           {new Date(task.dueDate).toLocaleDateString("en-US", {
                             month: "short",
                             day: "numeric",

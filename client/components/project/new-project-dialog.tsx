@@ -37,7 +37,17 @@ const projectSchema = z.object({
     .max(2000, "Description is too long"),
   startDate: z.string().min(1, "Start date is required"),
   dueDate: z.string().min(1, "Due date is required"),
+  color: z.string().optional(),
 });
+
+const colorPresets = [
+  { name: "Blue", value: "#3b82f6" },
+  { name: "Green", value: "#22c55e" },
+  { name: "Purple", value: "#a855f7" },
+  { name: "Orange", value: "#f97316" },
+  { name: "Pink", value: "#ec4899" },
+  { name: "Red", value: "#ef4444" },
+];
 
 type ProjectFormValues = z.infer<typeof projectSchema>;
 
@@ -52,6 +62,7 @@ export function NewProjectDialog() {
       description: "",
       startDate: "",
       dueDate: "",
+      color: "#3b82f6",
     },
   });
 
@@ -153,6 +164,43 @@ export function NewProjectDialog() {
                 )}
               />
             </div>
+
+            <FormField
+              control={form.control}
+              name="color"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Project Color</FormLabel>
+                  <FormControl>
+                    <div className="space-y-2">
+                      <div className="flex gap-2">
+                        {colorPresets.map((preset) => (
+                          <button
+                            key={preset.value}
+                            type="button"
+                            onClick={() => field.onChange(preset.value)}
+                            className={`h-10 w-10 rounded-full border-2 transition-all ${
+                              field.value === preset.value
+                                ? "border-gray-900 scale-110"
+                                : "border-gray-300 hover:scale-105"
+                            }`}
+                            style={{ backgroundColor: preset.value }}
+                            title={preset.name}
+                          />
+                        ))}
+                      </div>
+                      <Input
+                        type="text"
+                        placeholder="#3b82f6"
+                        {...field}
+                        className="font-mono text-sm"
+                      />
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             <div className="flex justify-end gap-3">
               <Button

@@ -43,7 +43,7 @@ const taskSchema = z.object({
     .string()
     .min(1, "Description is required")
     .max(2000, "Description is too long"),
-  status: z.enum(["todo", "in_progress", "done"]),
+  status: z.enum(["todo", "in_progress", "under_review", "done"]),
   priority: z.enum(["low", "medium", "high", "urgent"]),
   assignee: z.string().min(1, "Please select an assignee"),
   dueDate: z.string().min(1, "Due date is required"),
@@ -158,8 +158,9 @@ export function NewTaskDialog({ projectId, project }: NewTaskDialogProps) {
                       </FormControl>
                       <SelectContent>
                         <SelectItem value="todo">To Do</SelectItem>
-                        <SelectItem value="in_progress">In Progress</SelectItem>
-                        <SelectItem value="done">Done</SelectItem>
+                        <SelectItem value="in_progress">Work In Progress</SelectItem>
+                        <SelectItem value="under_review">Under Review</SelectItem>
+                        <SelectItem value="done">Completed</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />

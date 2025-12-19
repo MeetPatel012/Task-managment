@@ -63,28 +63,28 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-background to-muted">
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="mb-8 text-center">
-          <div className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2">
-            <CheckSquare className="h-6 w-6 text-white" />
-            <span className="text-xl font-bold text-white">TaskManager</span>
+          <div className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2">
+            <CheckSquare className="h-6 w-6 text-primary-foreground" />
+            <span className="text-xl font-bold text-primary-foreground">TaskManager</span>
           </div>
         </div>
 
         {/* Card */}
-        <div className="rounded-xl border bg-white p-8 shadow-lg">
+        <div className="rounded-xl border bg-card p-8 shadow-lg">
           <div className="mb-6">
-            <h1 className="text-2xl font-bold text-gray-900">Create account</h1>
-            <p className="mt-2 text-sm text-gray-600">
+            <h1 className="text-2xl font-bold text-card-foreground">Create account</h1>
+            <p className="mt-2 text-sm text-muted-foreground">
               Get started with your free account today
             </p>
           </div>
 
           {error && (
-            <div className="mb-4 rounded-lg bg-red-50 border border-red-200 p-3">
-              <p className="text-sm text-red-800">{error}</p>
+            <div className="mb-4 rounded-lg bg-destructive/10 border border-destructive/20 p-3">
+              <p className="text-sm text-destructive">{error}</p>
             </div>
           )}
 
@@ -146,11 +146,11 @@ export default function RegisterPage() {
             </form>
           </Form>
 
-          <p className="mt-6 text-center text-sm text-gray-600">
+          <p className="mt-6 text-center text-sm text-muted-foreground">
             Already have an account?{" "}
             <Link
               href="/login"
-              className="font-medium text-blue-600 hover:text-blue-700"
+              className="font-medium text-primary hover:text-primary/80"
             >
               Sign in
             </Link>

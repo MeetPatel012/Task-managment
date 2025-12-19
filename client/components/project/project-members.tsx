@@ -93,7 +93,7 @@ export function ProjectMembers({
               return (
                 <div
                   key={member.user._id}
-                  className="flex items-center justify-between p-3 rounded-lg border hover:bg-gray-50"
+                  className="flex items-center justify-between p-3 rounded-lg border hover:bg-accent"
                 >
                   <div className="flex items-center gap-3">
                     <Avatar className="h-10 w-10">
@@ -109,7 +109,7 @@ export function ProjectMembers({
                     </Avatar>
                     <div>
                       <p className="font-medium text-sm">{member.user.name}</p>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-muted-foreground">
                         {member.user.email}
                       </p>
                     </div>
@@ -132,7 +132,7 @@ export function ProjectMembers({
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="h-8 w-8 p-0 hover:bg-red-50 hover:text-red-600"
+                        className="h-8 w-8 p-0 hover:bg-destructive/10 hover:text-destructive"
                         onClick={() =>
                           handleRemoveMember(member.user._id, member.user.name)
                         }
@@ -147,8 +147,8 @@ export function ProjectMembers({
             })}
 
             {project.members.length === 0 && (
-              <div className="text-center py-8 text-gray-500">
-                <Users className="h-12 w-12 mx-auto mb-3 text-gray-300" />
+              <div className="text-center py-8 text-muted-foreground">
+                <Users className="h-12 w-12 mx-auto mb-3 text-muted-foreground/50" />
                 <p className="text-sm">No additional members yet</p>
                 {canManageMembers && (
                   <p className="text-xs mt-1">

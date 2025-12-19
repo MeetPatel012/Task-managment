@@ -22,8 +22,9 @@ interface KanbanBoardProps {
 
 const columns = [
   { id: "todo", title: "To Do" },
-  { id: "in_progress", title: "In Progress" },
-  { id: "done", title: "Done" },
+  { id: "in_progress", title: "Work In Progress" },
+  { id: "under_review", title: "Under Review" },
+  { id: "done", title: "Completed" },
 ];
 
 export function KanbanBoard({ tasks, onTaskClick }: KanbanBoardProps) {
@@ -134,7 +135,7 @@ export function KanbanBoard({ tasks, onTaskClick }: KanbanBoardProps) {
       onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
     >
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {columns.map((column) => (
           <KanbanColumn
             key={column.id}

@@ -1,10 +1,11 @@
 "use client";
 
-import { useAuthStore } from "@/store/useAuthStore";
-import { useProjects } from "@/lib/hooks/useProjects";
-import { ProjectCard } from "@/components/project/project-card";
 import { NewProjectDialog } from "@/components/project/new-project-dialog";
+import { ProjectCard } from "@/components/project/project-card";
+import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useProjects } from "@/lib/hooks/useProjects";
+import { useAuthStore } from "@/store/useAuthStore";
 import { AlertCircle, FolderOpen, Users } from "lucide-react";
 
 export default function ProjectsPage() {
@@ -23,8 +24,8 @@ export default function ProjectsPage() {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Projects</h1>
-          <p className="mt-2 text-gray-600">
+          <h1 className="text-3xl font-bold text-foreground">Projects</h1>
+          <p className="mt-2 text-muted-foreground">
             Manage your team projects and collaborate effectively
           </p>
         </div>
@@ -48,10 +49,10 @@ export default function ProjectsPage() {
       {error && (
         <div className="flex flex-col items-center justify-center py-12">
           <AlertCircle className="h-12 w-12 text-red-500 mb-4" />
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">
+          <h3 className="text-lg font-semibold text-foreground mb-2">
             Failed to load projects
           </h3>
-          <p className="text-gray-600 text-center max-w-md">
+          <p className="text-muted-foreground text-center max-w-md">
             {error instanceof Error
               ? error.message
               : "An error occurred while fetching projects"}
@@ -65,13 +66,13 @@ export default function ProjectsPage() {
           {/* Empty State - No Projects at All */}
           {data.projects.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12">
-              <div className="rounded-full bg-gray-100 p-6 mb-4">
-                <FolderOpen className="h-12 w-12 text-gray-400" />
+              <div className="rounded-full bg-muted p-6 mb-4">
+                <FolderOpen className="h-12 w-12 text-muted-foreground" />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              <h3 className="text-lg font-semibold text-foreground mb-2">
                 No projects yet
               </h3>
-              <p className="text-gray-600 text-center max-w-md mb-6">
+              <p className="text-muted-foreground text-center max-w-md mb-6">
                 Get started by creating your first project to organize tasks and
                 collaborate with your team.
               </p>
@@ -84,12 +85,10 @@ export default function ProjectsPage() {
                 <div>
                   <div className="flex items-center gap-2 mb-4">
                     <FolderOpen className="h-5 w-5 text-purple-600" />
-                    <h2 className="text-xl font-semibold text-gray-900">
+                    <h2 className="text-xl font-semibold text-foreground">
                       My Projects
                     </h2>
-                    <Badge className="bg-purple-100 text-purple-700 hover:bg-purple-100">
-                      {myProjects.length}
-                    </Badge>
+                    <Badge variant="secondary">{myProjects.length}</Badge>
                   </div>
                   <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                     {myProjects.map((project) => (
@@ -103,13 +102,11 @@ export default function ProjectsPage() {
               {sharedProjects.length > 0 && (
                 <div>
                   <div className="flex items-center gap-2 mb-4">
-                    <Users className="h-5 w-5 text-blue-600" />
-                    <h2 className="text-xl font-semibold text-gray-900">
+                    <Users className="h-5 w-5 text-primary" />
+                    <h2 className="text-xl font-semibold text-foreground">
                       Shared with Me
                     </h2>
-                    <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-100">
-                      {sharedProjects.length}
-                    </Badge>
+                    <Badge variant="secondary">{sharedProjects.length}</Badge>
                   </div>
                   <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                     {sharedProjects.map((project) => (
@@ -123,21 +120,5 @@ export default function ProjectsPage() {
         </>
       )}
     </div>
-  );
-}
-
-function Badge({
-  children,
-  className,
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) {
-  return (
-    <span
-      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${className}`}
-    >
-      {children}
-    </span>
   );
 }
