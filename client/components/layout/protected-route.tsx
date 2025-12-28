@@ -2,11 +2,11 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuthStore } from "@/store/useAuthStore";
+import { useAuth } from "@/lib/context/AuthContext";
 
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const { isAuthenticated, isInitialized, isLoading } = useAuthStore();
+  const { isAuthenticated, isInitialized, isLoading } = useAuth();
 
   useEffect(() => {
     if (isInitialized && !isLoading && !isAuthenticated) {

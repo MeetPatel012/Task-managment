@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
 import { Task, useUpdateTask } from "@/lib/hooks/useTasks";
-import { useAuthStore } from "@/store/useAuthStore";
+import { useAuth } from "@/lib/context/AuthContext";
 import { formatDistanceToNow } from "date-fns";
 import {
   AlertCircle,
@@ -54,7 +54,7 @@ export function TaskDetailSheet({
 }: TaskDetailSheetProps) {
   const [isEditing, setIsEditing] = useState(false);
   const updateTask = useUpdateTask();
-  const { user } = useAuthStore();
+  const { user } = useAuth();
 
   const form = useForm({
     defaultValues: {

@@ -3,7 +3,7 @@
 import { use, useState } from "react";
 import { useProject } from "@/lib/hooks/useProjects";
 import { useProjectTasks } from "@/lib/hooks/useTasks";
-import { useAuthStore } from "@/store/useAuthStore";
+import { useAuth } from "@/lib/context/AuthContext";
 import { KanbanBoard } from "@/components/task/kanban-board";
 import { NewTaskDialog } from "@/components/task/new-task-dialog";
 import { TaskDetailSheet } from "@/components/task/task-detail-sheet";
@@ -22,7 +22,7 @@ export default function ProjectDetailPage({
 }) {
   const { projectId } = use(params);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
-  const { user } = useAuthStore();
+  const { user } = useAuth();
   const {
     data: projectData,
     isLoading: projectLoading,

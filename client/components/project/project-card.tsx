@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuthStore } from "@/store/useAuthStore";
+import { useAuth } from "@/lib/context/AuthContext";
 import Link from "next/link";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -20,7 +20,7 @@ const roleColors = {
 };
 
 export function ProjectCard({ project }: ProjectCardProps) {
-  const { user } = useAuthStore();
+  const { user } = useAuth();
 
   const getInitials = (name: string) => {
     return name

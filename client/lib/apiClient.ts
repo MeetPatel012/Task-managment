@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getAuthToken, removeAuthToken, removeUserData } from "@/lib/cookies";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
@@ -12,7 +13,8 @@ export const apiClient = axios.create({
 // Request interceptor to add auth token
 apiClient.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("token");
+    // Try to get token from cookie instead of localStorage
+    const token = getAuthToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -36,8 +38,8 @@ apiClient.interceptors.response.use(
 
       if (!isAuthPage) {
         // Clear token and redirect to login
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
+        removeAuthToken();
+        removeUserData();
         window.location.href = "/login";
       }
     }

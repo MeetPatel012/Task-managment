@@ -5,11 +5,11 @@ import { ProjectCard } from "@/components/project/project-card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useProjects } from "@/lib/hooks/useProjects";
-import { useAuthStore } from "@/store/useAuthStore";
+import { useAuth } from "@/lib/context/AuthContext";
 import { AlertCircle, FolderOpen, Users } from "lucide-react";
 
 export default function ProjectsPage() {
-  const { user } = useAuthStore();
+  const { user } = useAuth();
   const { data, isLoading, error } = useProjects({ status: "active" });
 
   // Separate projects into categories

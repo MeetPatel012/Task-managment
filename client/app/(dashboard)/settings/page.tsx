@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { useAuthStore } from "@/store/useAuthStore";
+import { useAuth } from "@/lib/context/AuthContext";
 import { api } from "@/lib/apiClient";
+import { getAuthToken } from "@/lib/cookies";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -51,7 +52,7 @@ type ProfileFormValues = z.infer<typeof profileSchema>;
 type PasswordFormValues = z.infer<typeof passwordSchema>;
 
 export default function SettingsPage() {
-  const { user, setAuth } = useAuthStore();
+  const { user, setAuth } = useAuth();
   const [isProfileLoading, setIsProfileLoading] = useState(false);
   const [isPasswordLoading, setIsPasswordLoading] = useState(false);
 
@@ -81,10 +82,13 @@ export default function SettingsPage() {
 
       // Update user in store
       if (user) {
-        setAuth(
-          { ...user, name: updatedUser.name, email: updatedUser.email },
-          localStorage.getItem("token") || ""
-        );
+        const currentToken = getAuthToken();
+        if (currentToken) {
+          setAuth(
+            { ...user, name: updatedUser.name, email: updatedUser.email },
+            currentToken
+          );
+        }
       }
 
       toast.success("Profile updated successfully!");
